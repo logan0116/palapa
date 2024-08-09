@@ -1,8 +1,10 @@
 import streamlit as st
 from pathlib import Path
-from zhipuai import ZhipuAI
+import sys
 
-client = ZhipuAI(api_key="")  # 填写您自己的APIKey
+sys.path.append(str(Path(__file__).resolve().parents[2] / 'tools'))
+
+from utils import chat
 
 st.title("Title Translator")
 st.write("这是一个标题翻译器，可以将标题抽象化")
@@ -36,13 +38,12 @@ if st.button("翻译"):
         # 1.要素提取
         st.write(":one: 要素提取")
         with st.spinner("要素提取..."):
-            response = client.chat.completions.create(
-                model=st.session_state["model_engine"],
-                messages=[
+            output = chat(
+                each_prompt=[
                     {"role": "user", "content": st.session_state['prompt_step1'] + st.session_state['title']}
-                ]
+                ],
+                local_mode=True
             )
-            output = response.choices[0].message.content
             elements = output.split(' | ')
         # add to st
         st.session_state['elements'] = elements
@@ -55,13 +56,12 @@ if st.button("翻译"):
         with st.spinner("要素转换..."):
             elements_plus = []
             for element in elements:
-                response = client.chat.completions.create(
-                    model=st.session_state["model_engine"],
-                    messages=[
+                output = chat(
+                    each_prompt=[
                         {"role": "user", "content": st.session_state['prompt_step2'] + element + '->'}
-                    ]
+                    ],
+                    local_mode=True
                 )
-                output = response.choices[0].message.content
                 elements_plus.append(output)
         # add to st
         st.session_state['elements_plus'] = elements_plus
@@ -72,17 +72,16 @@ if st.button("翻译"):
         # 3.要素合成
         st.write(":three: 要素合成")
         with st.spinner("要素合成..."):
-            response = client.chat.completions.create(
-                model=st.session_state["model_engine"],
-                messages=[
+            output = chat(
+                each_prompt=[
                     {"role": "user",
                      "content": st.session_state['prompt_step3'] +
                                 '\n标题：' + st.session_state['title'] +
                                 '\n要素：' + ' | '.join(elements) +
                                 '\n抽象化的要素：' + ' | '.join(elements_plus) +
                                 '\n新标题：'}
-                ]
+                ],
+                local_mode=True
             )
-            output = response.choices[0].message.content
         # display
         st.write(output)

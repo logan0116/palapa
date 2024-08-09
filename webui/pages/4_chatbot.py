@@ -1,9 +1,9 @@
 import streamlit as st
-from zhipuai import ZhipuAI
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).resolve().parents[2] / 'tools'))
 
-client = ZhipuAI(api_key="")  # 填写您自己的APIKey
-
-st.title("Chatbot 🤖")
+from utils import chat
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -11,8 +11,6 @@ if "messages" not in st.session_state:
         {"role": "system", "content": "你是一个用于科研的助手，擅长于从文献分析的角度为用户提供帮助。"},
         {"role": "assistant", "content": "你好！欢迎来到Palapa！"}
     ]
-if "model_engine" not in st.session_state:
-    st.session_state["model_engine"] = "glm-4-air"
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages[1:]:
@@ -30,12 +28,10 @@ if prompt := st.chat_input("What is up?"):
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = client.chat.completions.create(
-                model=st.session_state["model_engine"],
-                messages=st.session_state.messages
+            output = chat(
+                each_prompt=st.session_state.messages,
+                local_mode=True
             )
-            output = response.choices[0].message.content
         st.markdown(output)
-
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": output})
