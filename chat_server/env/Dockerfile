@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+FROM nvidia/cuda:12.1.0-cudnn8-devel-ubuntu22.04
 
 # Add sources list and install dependencies
 ADD source.list /etc/apt/sources.list
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install Llama Factory requirements
 RUN pip3 install torch \
-    --no-cache-dir -i https://download.pytorch.org/whl/cu124/
+    --no-cache-dir -i https://download.pytorch.org/whl/cu121/
 
 RUN pip3 install transformers \
     datasets \
@@ -52,10 +52,10 @@ RUN pip install flash-attn \
 # Clone, build and install llama.cpp
 RUN git clone https://github.com/ggerganov/llama.cpp && \
     cd llama.cpp && \
-    cmake -B build -DGGML_CUDA=ON -DCMAKE_BUILD_RPATH=/usr/lib/x86_64-linux-gnu:/usr/local/cuda-12.4/compat && \
+    cmake -B build -DGGML_CUDA=ON -DCMAKE_BUILD_RPATH=/usr/lib/x86_64-linux-gnu:/usr/local/cuda-12.1/compat && \
     cmake --build build --config Release -j 8 && \
     cd ..
 
 # Install llama-cpp-python
-RUN CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_BUILD_RPATH=/usr/lib/x86_64-linux-gnu:/usr/local/cuda-12.4/compat" \
-    pip install llama-cpp-python
+RUN pip install llama-cpp-python \
+  --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu121

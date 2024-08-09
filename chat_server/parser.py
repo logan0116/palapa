@@ -6,7 +6,7 @@ def parameter_parser():
     parser.add_argument('--port', type=int,
                         default=9010, help='port')
     parser.add_argument('--model_path', type=str,
-                        default='model/Meta-Llama-3-70B-Instruct.Q4_K_M.gguf', help='model path')
+                        default='model/qwen2-7b-instrust-awq-q4_K_M.gguf', help='model path')
     parser.add_argument('--n_ctx', type=int,
                         default=2048, help='n_ctx')
 
