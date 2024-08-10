@@ -1,5 +1,4 @@
 #!/bin/bash
-# 只启动一个容器 palapa_base
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
