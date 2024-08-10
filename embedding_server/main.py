@@ -29,7 +29,7 @@ print('load model successfully.')
 app = FastAPI()
 
 
-@app.post("/api/get_top")
+@app.post("/get_top")
 async def get_top_index(search_info: GetTopReqItem):
     """
     request body:
