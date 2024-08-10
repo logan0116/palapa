@@ -1,0 +1,8 @@
+# config.ini.template
+# Rename this file to config.ini and fill in the actual values
+
+[zhipu_chat]
+api_key =
+
+[local_chat]
+port = 9010
