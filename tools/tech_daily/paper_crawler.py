@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 """
 @Project ：Daily_NLP 
-@File    ：1_paper_crawler.py
+@File    ：paper_crawler.py
 @IDE     ：PyCharm 
 @Author  ：Logan
 @Date    ：2023/11/26 下午3:38 
@@ -162,14 +162,15 @@ def insert_data(database_path, title_list, abstract_list, pdf_link_list, authors
     conn.close()
 
     # print new
-    # 打印表格
-    local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    print('New papers in database at {}:'.format(local_time))
-    print_table(zip([i + 1 for i in range(len(title_list))], title_list_new, pdf_link_list_new),
-                header=['Index', 'Title', 'PDF Link'])
+    # # 打印表格
+    # local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    # print('New papers in database at {}:'.format(local_time))
+    # print_table(zip([i + 1 for i in range(len(title_list))], title_list_new, pdf_link_list_new),
+    #             header=['Index', 'Title', 'PDF Link'])
+    return {'title': title_list_new, 'pdf_link': pdf_link_list_new}
 
 
-def main(database_path):
+def paper_crawler(database_path):
     # arXiv的NLP相关论文列表的URL（这里需要替换为实际的URL）
     url = 'https://arxiv.org/list/cs/new'
 
@@ -206,15 +207,11 @@ def main(database_path):
         # add
         abstract_list.extend(abstract_list_temp)
 
-    print('Title:', len(title_list))
-    print('Authors:', len(authors_list))
-    print('PDF Link:', len(pdf_link_list))
-    print('Abstract:', len(abstract_list))
+    # print('Title:', len(title_list))
+    # print('Authors:', len(authors_list))
+    # print('PDF Link:', len(pdf_link_list))
+    # print('Abstract:', len(abstract_list))
 
     # 将数据插入数据库
-    insert_data(database_path, title_list, abstract_list, pdf_link_list, authors_list, author_dict)
-
-
-if __name__ == '__main__':
-    database_path = sys.argv[1]
-    main(database_path)
+    paper_info = insert_data(database_path, title_list, abstract_list, pdf_link_list, authors_list, author_dict)
+    return paper_info

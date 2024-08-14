@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 """
 @Project ：Daily_NLP 
-@File    ：2_paper_screen.py
+@File    ：paper_screen.py
 @IDE     ：PyCharm 
 @Author  ：Logan
 @Date    ：2023/11/26 下午5:36 
@@ -32,7 +32,7 @@ def get_top(s_list, t_list, num_top):
     :return:
     """
     try:
-        res = requests.post('http://192.168.1.115:9001/api/get_top',
+        res = requests.post('http://192.168.1.116:9001/get_top',
                             json={"source": s_list, "target": t_list, "top_k": num_top})
         res_data = res.json()
         if len(res_data['data']) > 0:
@@ -55,7 +55,7 @@ def update_deal_status(cursor, title_list_top_k):
         cursor.execute("UPDATE papers SET deal_status = TRUE WHERE title = ?", (title,))
 
 
-def main(database_path, source_sentences, num_top):
+def paper_screen(database_path, source_sentences, num_top):
     # database
     # 连接到 SQLite 数据库
     conn = sqlite3.connect(database_path)
@@ -81,10 +81,3 @@ def main(database_path, source_sentences, num_top):
     cursor.close()
     conn.commit()
     conn.close()
-
-
-if __name__ == '__main__':
-    database_path = sys.argv[1]
-    source_sentences = sys.argv[2].split()
-    num_top = int(sys.argv[3])
-    main(database_path, source_sentences, num_top)
