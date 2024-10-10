@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 """
 @Project ：Daily_NLP 
-@File    ：3_download_pdf.py
+@File    ：download_pdf.py
 @IDE     ：PyCharm 
 @Author  ：Logan
 @Date    ：2023/11/26 下午8:39 

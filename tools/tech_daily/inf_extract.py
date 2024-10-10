@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 """
 @Project ：Daily_NLP 
-@File    ：4_inf_extract.py
+@File    ：inf_extract.py
 @IDE     ：PyCharm 
 @Author  ：Logan
 @Date    ：2023/11/26 下午9:52 

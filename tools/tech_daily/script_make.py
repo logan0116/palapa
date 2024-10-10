@@ -2,19 +2,22 @@
 # -*- coding: UTF-8 -*-
 """
 @Project ：Daily_NLP 
-@File    ：5_script_make.py
+@File    ：script_make.py
 @IDE     ：PyCharm 
 @Author  ：Logan
 @Date    ：2023/11/27 上午12:10 
 """
 
-from openai import OpenAI
-import openai
 import time
 import json
-from utils import text_generation
-import sys
 import os
+
+from pathlib import Path
+import sys
+
+sys.path.append(str(Path(__file__).resolve().parents[2] / 'tools'))
+
+from utils import chat
 
 
 def load_prompt():
@@ -73,7 +76,7 @@ def make_script(script_path):
         # response
         title, abstract, context = title_abstract['title'], title_abstract['abstract'], title_abstract['context']
         each_prompt = make_prompt_research(system_prompt, title, abstract, context)
-        message = text_generation(each_prompt, mode='deepseek')
+        message = chat(each_prompt, local_mode=True)
         response_list.append(message.strip())
 
     title_list = [title_abstract['title'] for title_abstract in paper_info_list]
@@ -84,6 +87,6 @@ def make_script(script_path):
 
 
 if __name__ == '__main__':
-    # script_path = sys.argv[1]
-    script_path = '../../data/script/'
+    script_path = sys.argv[1]
+    # script_path = '../../data/script/'
     make_script(script_path)
