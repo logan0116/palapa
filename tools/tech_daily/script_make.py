@@ -10,7 +10,7 @@
 
 import time
 import json
-import os
+about:blank#blockedimport os
 
 from pathlib import Path
 import sys
