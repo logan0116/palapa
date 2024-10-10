@@ -33,7 +33,10 @@ def get_top(s_list, t_list, num_top):
     """
     try:
         res = requests.post('http://192.168.1.116:9001/get_top',
-                            json={"source": s_list, "target": t_list, "top_k": num_top})
+                            json={"source": s_list, 
+                                  "target": t_list, 
+                                  "top_k": num_top,
+                                  "top_threshold": 0.0})
         res_data = res.json()
         if len(res_data['data']) > 0:
             code = res_data['code']
@@ -81,3 +84,17 @@ def paper_screen(database_path, source_sentences, num_top):
     cursor.close()
     conn.commit()
     conn.close()
+
+if __name__ == '__main__':
+    database_path = sys.argv[1]
+    source_sentences = [
+        'Exploring the latest advancements in large language model fine-tuning, focusing on parameter-efficient methods and their effectiveness in various NLP tasks.',
+        'Investigating the role of prompt engineering in enhancing the performance of large language models, including the development of hard and soft prompts for context-specific applications.',
+        'Analyzing in-context learning strategies within large language models to improve understanding and application of complex language tasks.',
+        'Exploring domain-specific knowledge graph construction techniques and their impact on information retrieval and data integration.',
+        'Advancements in knowledge extraction and fusion for building comprehensive knowledge graphs, emphasizing on representation learning and data accuracy.',
+        'Investigating the integration of large language models with knowledge graphs for enhanced natural language understanding and reasoning capabilities.'
+    ]
+    num_top = 5
+
+    paper_screen(database_path, source_sentences, num_top)

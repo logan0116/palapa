@@ -163,10 +163,10 @@ def insert_data(database_path, title_list, abstract_list, pdf_link_list, authors
 
     # print new
     # # 打印表格
-    # local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    # print('New papers in database at {}:'.format(local_time))
-    # print_table(zip([i + 1 for i in range(len(title_list))], title_list_new, pdf_link_list_new),
-    #             header=['Index', 'Title', 'PDF Link'])
+    local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    print('New papers in database at {}:'.format(local_time))
+    print_table(zip([i + 1 for i in range(len(title_list))], title_list_new, pdf_link_list_new),
+                header=['Index', 'Title', 'PDF Link'])
     return {'title': title_list_new, 'pdf_link': pdf_link_list_new}
 
 
@@ -207,11 +207,14 @@ def paper_crawler(database_path):
         # add
         abstract_list.extend(abstract_list_temp)
 
-    # print('Title:', len(title_list))
-    # print('Authors:', len(authors_list))
-    # print('PDF Link:', len(pdf_link_list))
-    # print('Abstract:', len(abstract_list))
+    print('Title:', len(title_list))
+    print('Authors:', len(authors_list))
+    print('PDF Link:', len(pdf_link_list))
+    print('Abstract:', len(abstract_list))
 
     # 将数据插入数据库
     paper_info = insert_data(database_path, title_list, abstract_list, pdf_link_list, authors_list, author_dict)
     return paper_info
+
+if __name__ == '__main__':
+    paper_crawler(sys.argv[1])

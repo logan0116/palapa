@@ -23,8 +23,7 @@ def chat(each_prompt: list, local_mode=False):
         return response.choices[0].message.content
     else:
         # local mode
-        port = config['local_chat']['port']
-        url = f"http://localhost:{port}/chat"
+        url = f"http://192.168.1.116:9010/chat"
         res = requests.post(
             url,
             json={
