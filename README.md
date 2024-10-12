@@ -37,6 +37,31 @@ Palapa致力于通过先进的人工智能技术，提供一站式的学术研�
 
 我们欢迎任何形式的贡献，无论是代码、文档、测试反馈，还是新的功能建议。请通过提交Issue或Pull Request的方式与我们联系。
 
+## 部署
+
+### 大模型
+
+1. 创建镜像
+
+    ```bush
+    # path: palapa
+    cd chat_server/env/
+    sudo docker build -t chat_server:v1.0 .
+    ```
+2. 准备模型
+    模型存储于chat_server/model路径下
+3. 部署
+    以qwen2-7b-instrust-awq-q4_K_M.gguf为例，修改chat_server
+    
+    
+    ```
+    # 
+
+    ```
+
+
+### embedding服务
+
 ---
 
 Thank you for using Palapa! We hope this tool will significantly enhance your research productivity and innovation. 🌟

@@ -1,1 +1,4 @@
 config.ini
+data/
+data_test/
+.idea/

@@ -37,7 +37,7 @@ def export_script(script_path, title_list, response_list, url_list, local_time):
     :param local_time:
     :return:
     """
-    start = '嗨，欢迎来到今天的NLP资讯速递，让我们看看又有哪些最新的研究。\n\n'
+    start = f'# {local_time}\n\n嗨，欢迎来到今天的NLP资讯速递，让我们看看又有哪些最新的研究。\n\n'
     end = '以上是今天所有的内容，如果您对今天讨论的任何主题感兴趣，不妨深入阅读相关论文，以获取更全面的了解。祝你今天有个好心情~ '
 
     script_text_output_path = os.path.join(script_path, local_time, 'outputs.txt')
