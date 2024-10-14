@@ -11,8 +11,17 @@ import json
 import sqlite3
 import time
 import pdfplumber
-import os
 import sys
+import supervision as sv
+from ultralytics import YOLO
+import pdf2image
+import os
+
+
+# modify the path to model's weights.
+def load_model():
+    model = YOLO('model/yolov10x_best.pt')
+    return model
 
 
 def get_info(cursor):
@@ -104,6 +113,39 @@ def update_deal_read_status(cursor, id_list):
         cursor.execute("UPDATE papers SET deal_status = FALSE, if_read = TRUE WHERE id = ?", (id_,))
 
 
+def get_img(pdf_path_list, model):
+    """
+    从pdf中提取图片
+    :param pdf_path_list:
+    :param model:
+    :return:
+    """
+    for pdf_path in pdf_path_list:
+        output_dir = pdf_path.replace('.pdf', '/')
+        # create path
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        images = pdf2image.convert_from_path(pdf_path)
+
+        fig_idx = 0
+        for i, image in enumerate(images):
+            results = model(source=image, conf=0.2, iou=0.8)[0]
+            # show results with "supervision" library
+            detections = sv.Detections.from_ultralytics(results)
+
+            box_list = detections.xyxy.tolist()
+            class_name_list = detections.data['class_name']
+            for class_name, box in zip(class_name_list, box_list):
+                if class_name == 'Picture':
+                    x_min, y_min, x_max, y_max = map(int, box)
+                    cropped_image = image.crop((x_min, y_min, x_max, y_max))  # 裁剪图片区域
+
+                    # 保存裁剪后的图片
+                    cropped_image.save(f"{output_dir}/image_{fig_idx + 1}.png")
+                    fig_idx += 1
+
+
 def main(database_path, script_path):
     # database
     # 连接到 SQLite 数据库
@@ -114,8 +156,11 @@ def main(database_path, script_path):
     script_save_path = get_script_save_path(script_path)
     # 从数据库获取所有deal_status为TRUE的title和abstract和pdf_path
     id_list, title_list, abstract_list, pdf_path_list, pdf_url_list = get_info(cursor)
-    # get image from pdf
+    # get inf from pdf
     context_list = get_info_from_pdf(pdf_path_list)
+    # get image from pdf
+    model = load_model()
+    get_img(pdf_path_list, model)
     # 保存title和abstract
     save_title_abstract(title_list, abstract_list, context_list, pdf_url_list, script_save_path)
     # 更新数据库
