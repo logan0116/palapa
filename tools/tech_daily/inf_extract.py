@@ -121,7 +121,7 @@ def get_img(pdf_path_list, model):
     :return:
     """
     for pdf_path in pdf_path_list:
-        output_dir = pdf_path.replace('.pdf', '/')
+        output_dir = pdf_path.replace('paper', 'img').replace('.pdf', '/')
         # create path
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
