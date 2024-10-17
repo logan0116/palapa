@@ -37,16 +37,16 @@ def export_script(script_path, title_list, response_list, url_list, local_time):
     :param local_time:
     :return:
     """
-    start = f'# {local_time}\n\n嗨，欢迎来到今天的NLP资讯速递，让我们看看又有哪些最新的研究。\n\n'
+    start = f'嗨，欢迎来到今天的NLP资讯速递，让我们看看又有哪些最新的研究。\n\n'
     end = '以上是今天所有的内容，如果您对今天讨论的任何主题感兴趣，不妨深入阅读相关论文，以获取更全面的了解。祝你今天有个好心情~ '
 
-    script_text_output_path = os.path.join(script_path, local_time, 'outputs.txt')
+    script_text_output_path = os.path.join(script_path, local_time, 'outputs.md')
     with open(script_text_output_path, 'w', encoding='utf-8') as f:
         f.write(start)
         for index, (title, response, url) in enumerate(zip(title_list, response_list, url_list)):
             f.write('## '.format(index + 1) + title + '\n')
             # 介绍
-            f.write(response + '\n')
+            f.write(response + '\n\n')
             # pdf link
             f.write('Pdf Link: ' + url + '\n\n')
         f.write(end + '\n')
