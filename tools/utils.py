@@ -6,6 +6,9 @@ import requests
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+host = config['local_chat']['host']
+port = config['local_chat']['port']
+
 
 def chat(each_prompt: list, local_mode=False):
     """
@@ -23,7 +26,7 @@ def chat(each_prompt: list, local_mode=False):
         return response.choices[0].message.content
     else:
         # local mode
-        url = f"http://192.168.1.116:9010/chat"
+        url = f"http://{host}:{port}/chat"
         res = requests.post(
             url,
             json={

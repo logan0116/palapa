@@ -7,7 +7,7 @@ docker run \
   -d \
   --rm \
   --name palapa_base \
-  --network=host \
+  -p 80:8501 \
   --shm-size 32G \
   -v "$SCRIPT_DIR:/palapa/" \
   -w /palapa/ \
